@@ -20,7 +20,7 @@
         global $conn;
         //CODE HERE
         //SQL SELECT
-        $sql    = "SELECT tasks.id, tasks.title, tasks.task_datetime, tasks.description, tasks.type_id, tasks.priority_id, tasks.status_id,  
+        $sql    = "SELECT tasks.*,  
                     types.name as `type`,
                     priorities.name as `priority`,
                     statuses.name as `status`
@@ -48,25 +48,41 @@
 
                 if($row["status"] == $check_status) {
                     $id = $row["id"];
-                    echo '<button class="w-100 d-flex bg-white p-0 py-2 border-0 border-bottom" href="#modal-task" data-bs-toggle="modal" onclick="editTask('.$id.')">
+                    echo '<button class="w-100 d-flex bg-white p-0 py-2 border-0 border-bottom" id = "'.$id.'" title="'.$row["title"].'" status="'.$row["status_id"].'"
+                    date="'.$row["task_datetime"].'" description="'.$row["description"].'"
+                    priority="'.$row["priority_id"].'" type="'.$row["type_id"].'" 
+                    href="#modal-task" data-bs-toggle="modal" onclick="editTask('.$id.')">
                 <div class="px-2">
                     <i class="'.$icon.' text-success fs-2"></i> 
                 </div>
                 <div class="text-start w-100 pe-2">
-                    <div class="fw-bold" id="t'.$id.'" data="'.$row["title"].'" status="'.$row["status_id"].'">'.$row["title"].'</div>
+                    <div class="fw-bold" >'.$row["title"].'</div>
                     <div class="text-start">
-                        <div class="text-gray" id="m'.$id.'" data="'.$row["task_datetime"].'">#'.$id.' created in '.$row["task_datetime"].'</div>
-                        <div class="" id="d'.$id.'" data="'.$row["description"].'">'.$row["description"].'</div>
+                        <div class="text-gray">#'.$id.' created in '.$row["task_datetime"].'</div>
+                        <div class="">'.$row["description"].'</div>
                     </div>
                     <div class="">
-                        <span class="btn btn-primary py-1 px-2" id="p'.$id.'" data="'.$row["priority_id"].'">'.$row["priority"].'</span>
-                        <span class="btn btn-light text-black py-1 px-2" id="y'.$id.'" data="'.$row["type_id"].'">'.$row["type"].'</span>
+                        <span class="btn btn-primary py-1 px-2">'.$row["priority"].'</span>
+                        <span class="btn btn-light text-black py-1 px-2">'.$row["type"].'</span>
                     </div>
                 </div>
             </button>';
                 }
             }
         } 
+    }
+
+    function countTasks($check_status){
+        global $conn;
+        //CODE HERE
+        //SQL SELECT
+        $sql    = "SELECT *  
+                    FROM `tasks`
+                    WHERE `status_id` =  $check_status";
+
+        $result = mysqli_query($conn, $sql);
+        $rowcount = mysqli_num_rows($result);
+        echo $rowcount;
     }
 
 
@@ -78,38 +94,81 @@
         $type        = $_POST['type'];
         $priority    = $_POST['priority'];
         $status      = $_POST['status'];
-        $date        = $_POST['date'];
+        $datetime    = $_POST['date-time'];
         $description = $_POST['description'];
 
-        //SQL INSERT
-        $sql = "INSERT INTO `tasks`(`title`, `type_id`, `priority_id`, `status_id`, `task_datetime`, `description`) VALUES ('$title', '$type', '$priority', '$status', '$date', '$description')";
+        //Form validation
+        if (empty($_POST['title']) || empty($_POST['type']) || empty($_POST['priority']) || empty($_POST['status']) || empty($_POST['date-time']) || empty($_POST['description'])) {
+            $_SESSION['message1'] = "Please fill the form !";
+		    header('location: index.php');
+        }
+        else {
+            //SQL INSERT
+            $sql = "INSERT INTO `tasks`(`title`, `type_id`, `priority_id`, `status_id`, `task_datetime`, `description`) VALUES ('$title', '$type', '$priority', '$status', '$datetime', '$description')";
 
-        //checking if the Query is successful. 
-        if (mysqli_query($conn, $sql)) {
-            echo "New record created successfully";
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            //checking if the Query is successful. 
+            if (mysqli_query($conn, $sql)) {
+                $_SESSION['message'] = "Task has been added successfully !";
+                header('location: index.php');
+            } else {
+                echo "ERROR: Could not able to execute $sql. " .mysqli_error($conn);
+            }
         }
 
-        $_SESSION['message'] = "Task has been added successfully !";
-		header('location: index.php');
     }
 
     function updateTask()
     {
+        global $conn;
         //CODE HERE
-        //SQL UPDATE
-        $_SESSION['message'] = "Task has been updated successfully !";
-		header('location: index.php');
+        $id          = $_POST['task-id'];
+        $title       = $_POST['title'];
+        $type        = $_POST['type'];
+        $priority    = $_POST['priority'];
+        $status      = $_POST['status'];
+        $datetime    = $_POST['date-time'];
+        $description = $_POST['description'];
+
+        //Form validation
+        if (empty($_POST['title']) || empty($_POST['type']) || empty($_POST['priority']) || empty($_POST['status']) || empty($_POST['date-time']) || empty($_POST['description'])) {
+            $_SESSION['message1'] = "Please fill the form !";
+		    header('location: index.php');
+        }
+        else {
+            //SQL UPDATE
+            $sql = "UPDATE `tasks` 
+            SET `title`='$title',`type_id`='$type',`priority_id`='$priority',`status_id`='$status',`task_datetime`='$datetime',`description`='$description' 
+            WHERE id = $id";
+
+            if (mysqli_query($conn, $sql)) {
+                $_SESSION['message'] = "Task has been updated successfully !";
+                header('location: index.php');
+            } else {
+                echo "ERROR: Could not able to execute $sql. " .mysqli_error($conn);
+            }
+        }
+
+
+        
     }
 
     function deleteTask()
     {
+        global $conn;
+
+        $id = $_POST['task-id'];
         //CODE HERE
         //SQL DELETE
-        $sqlDELETE FROM `tasks` WHERE CustomerName='Alfreds Futterkiste';
-        $_SESSION['message'] = "Task has been deleted successfully !";
-		header('location: index.php');
+        $sql = "DELETE FROM tasks WHERE id = $id";
+
+        //checking if the Query is successful. 
+        if (mysqli_query($conn, $sql)) {
+            $_SESSION['message'] = "Task has been deleted successfully !";
+		    header('location: index.php');
+        } else {
+            $_SESSION['message1'] = "Task has not been deleted !";
+		    header('location: index.php');
+        }
     }
 
 ?>

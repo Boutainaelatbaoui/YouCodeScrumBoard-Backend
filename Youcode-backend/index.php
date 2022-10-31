@@ -115,7 +115,7 @@
 					<a href="#" class="navbar-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
 						<img src="assets/img/user/user-13.jpg" alt="" /> 
 						<span>
-							<span class="d-none d-md-inline">Jilali Smith</span>
+							<span class="d-none d-md-inline">Boutaina El Atbaoui</span>
 							<b class="caret"></b>
 						</span>
 					</a>
@@ -151,7 +151,7 @@
 							<div class="menu-profile-info">
 								<div class="d-flex align-items-center">
 									<div class="flex-grow-1">
-										Jilali Smith
+										Boutaina El Atbaoui
 									</div>
 									<div class="menu-caret ms-auto"></div>
 								</div>
@@ -249,13 +249,22 @@
 					?>
 					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
 				</div>
+				<?php elseif (isset($_SESSION['message1'])): ?>
+				<div class="alert alert-warning alert-dismissible fade show">
+				<strong>warning!</strong>
+					<?php 
+						echo $_SESSION['message1']; 
+						unset($_SESSION['message1']);
+					?>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
+				</div>
 			<?php endif ?>
 			<div class="row">
 					
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">To do (<span id="to-do-tasks-count">0</span>)</h4>
+							<h4 class="panel-title">To do (<span id="to-do-tasks-count"><?php countTasks(1); ?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -276,7 +285,7 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">In Progress (<span id="in-progress-tasks-count">0</span>)</h4>
+							<h4 class="panel-title">In Progress (<span id="in-progress-tasks-count"><?php countTasks(2); ?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -297,7 +306,7 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">Done (<span id="done-tasks-count">0</span>)</h4>
+							<h4 class="panel-title">Done (<span id="done-tasks-count"><?php countTasks(3); ?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -337,7 +346,7 @@
 					</div>
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
-							<input type="hidden" id="task-id">
+							<input  type="hidden" name="task-id" id="task-id">
 							<div class="mb-3">
 								<label class="form-label">Title</label>
 								<input type="text" class="form-control" name="title" id="task-title"/>
@@ -377,7 +386,7 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Date</label>
-								<input type="date" class="form-control" name="date" id="task-date"/>
+								<input type="datetime-local" class="form-control" name="date-time" id="task-date"/>
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
@@ -399,36 +408,7 @@
 	<script src="assets/js/vendor.min.js"></script>
 	<script src="assets/js/app.min.js"></script>
 	<!-- ================== END core-js ================== -->
+	<script src="main.js"></script>
 
-	<script>
-		let type_feature = document.getElementById('task-type-feature');
-		let type_bug     = document.getElementById('task-type-bug');
-
-		function addTask(){
-			document.getElementById('task-save-btn').style.display   = "block";
-			document.getElementById('task-update-btn').style.display = "none";
-			document.getElementById('task-delete-btn').style.display = "none";
-
-			document.getElementById('form-task').reset();
-		}
-
-		function editTask(id){
-			document.getElementById('task-save-btn').style.display   = "none";
-			document.getElementById('task-update-btn').style.display = "block";
-			document.getElementById('task-delete-btn').style.display = "block";
-
-			document.getElementById('task-title').value = document.getElementById("t"+id).getAttribute("data");
-			document.getElementById('task-priority').value = document.getElementById("p"+id).getAttribute("data");
-			document.getElementById('task-description').value = document.getElementById("d"+id).getAttribute("data");
-			document.getElementById('task-status').value = document.getElementById("t"+id).getAttribute("status");
-			document.getElementById('task-date').value = document.getElementById("m"+id).getAttribute("data");
-			if(document.getElementById("m"+id).getAttribute("data") == '1'){
-				type_feature.checked = true;
-			}
-			else{
-				type_feature.checked = true;
-			}
-		}
-	</script>
 </body>
 </html>
