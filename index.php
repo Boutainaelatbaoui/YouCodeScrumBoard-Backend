@@ -350,7 +350,7 @@
 							<div class="mb-3">
 								<label class="form-label">Title</label>
 								<input type="text" class="form-control" name="title" id="task-title"/>
-								<div class="text-danger fw-bolder" id="invalid-title"> * Please add a title !! </div>
+								<div class="text-danger fw-bolder" id="invalid-title" style="display: none;"> * Please add a title !! </div>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
@@ -375,6 +375,7 @@
 									<option value="3">High</option>
 									<option value="4">Critical</option>
 								</select>
+								<div class="text-danger fw-bolder" id="invalid-priority" style="display: none;"> * Please choose a priority !! </div>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Status</label>
@@ -384,7 +385,7 @@
 									<option value="2">In Progress</option>
 									<option value="3">Done</option>
 								</select>
-								<div class="text-danger fw-bolder" id="invalid-status"> * Please choose a status !! </div>
+								<div class="text-danger fw-bolder" id="invalid-status" style="display: none;"> * Please choose a status !! </div>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Date</label>

@@ -98,7 +98,7 @@
         $description = $_POST['description'];
 
         //Form validation
-        if (empty($_POST['title']) || empty($_POST['type']) || empty($_POST['priority']) || empty($_POST['status']) || empty($_POST['date-time']) || empty($_POST['description'])) {
+        if(empty($_POST['title']) || empty($_POST['status']) || empty($_POST['priority'])) {
             $_SESSION['message1'] = "Please fill the form !";
 		    header('location: index.php');
         }
@@ -130,7 +130,7 @@
         $description = $_POST['description'];
 
         //Form validation
-        if (empty($_POST['title']) || empty($_POST['type']) || empty($_POST['priority']) || empty($_POST['status']) || empty($_POST['date-time']) || empty($_POST['description'])) {
+        if (empty($_POST['title']) || empty($_POST['status']) || empty($_POST['priority'])) {
             $_SESSION['message1'] = "Please fill the form !";
 		    header('location: index.php');
         }
